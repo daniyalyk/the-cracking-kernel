@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm run lint:*)",
+      "Bash(npx next dev:*)",
+      "WebFetch(domain:localhost)",
+      "Bash(curl:*)",
+      "WebFetch(domain:www.thecrackingkernel.com)",
+      "WebSearch"
+    ]
+  }
+}

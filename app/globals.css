@@ -1,26 +1,114 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --primary: #1A312D;
+  --primary-light: #24433D;
+  --primary-dark: #111F1C;
+  --secondary: #FFFFFF;
+  --cream: #F7F3EE;
+  --cream-dark: #EDE6DC;
+  --warm: #C8A97E;
+  --warm-light: #D4BC9A;
+  --warm-dark: #B08D5E;
+  --olive: #4A6741;
+  --text-primary: #1A312D;
+  --text-secondary: #4A5E59;
+  --text-light: #7A8E89;
+  --text-on-dark: #C5CFC9;
+  --background: #FFFFFF;
+  --foreground: #1A312D;
+  --border-light: rgba(26, 49, 45, 0.08);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-light: var(--primary-light);
+  --color-primary-dark: var(--primary-dark);
+  --color-secondary: var(--secondary);
+  --color-cream: var(--cream);
+  --color-cream-dark: var(--cream-dark);
+  --color-warm: var(--warm);
+  --color-warm-light: var(--warm-light);
+  --color-warm-dark: var(--warm-dark);
+  --color-olive: var(--olive);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-light: var(--text-light);
+  --color-text-on-dark: var(--text-on-dark);
+  --color-border-light: var(--border-light);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+html::-webkit-scrollbar {
+  width: 0px;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Syne", system-ui, sans-serif;
+}
+
+::selection {
+  background-color: #1A312D;
+  color: #FFFFFF;
+}
+
+/* Magnetic button */
+.magnetic-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+/* Glow effect */
+.glow-effect {
+  box-shadow: 0 0 0 0 rgba(200, 169, 126, 0);
+  transition: box-shadow 0.4s ease;
+}
+
+.glow-effect:hover {
+  box-shadow: 0 0 40px 10px rgba(200, 169, 126, 0.2);
+}
+
+/* Grain overlay */
+.grain-overlay::after {
+  content: "";
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  right: -50%;
+  bottom: -50%;
+  width: 200%;
+  height: 200%;
+  background: transparent url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E") repeat;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.3;
+}
+
+/* Smooth image loading */
+img {
+  transition: opacity 0.3s ease;
+}
+
+/* Parallax containers */
+.parallax-img-wrap {
+  overflow: hidden;
+}
+
+.parallax-img-wrap img {
+  will-change: transform;
 }
