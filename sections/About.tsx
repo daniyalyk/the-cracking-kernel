@@ -144,14 +144,14 @@ export default function About() {
       {/* Marquee strip */}
       <div
         ref={marqueeRef}
-        className="py-5 border-y border-primary/6 overflow-hidden bg-cover bg-center"
-        style={{ backgroundImage: "url('/assets/images/app-bg.png')" }}
+        className="py-5 border-y border-primary/6 overflow-hidden bg-cover bg-center bg-white"
+        // style={{ backgroundImage: "url('/assets/images/app-bg.png')" }}
       >
         <div className="marquee-track flex whitespace-nowrap gap-12">
           {[...Array(2)].map((_, i) => (
             <span
               key={i}
-              className="flex items-center gap-12 text-primary/20 text-sm tracking-[0.3em] uppercase shrink-0"
+              className="flex items-center gap-12 text-primary text-sm tracking-[0.3em] uppercase shrink-0"
               style={{ fontFamily: "Syne, sans-serif" }}
             >
               <span>Good Food</span>
