@@ -69,7 +69,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="footer-col md:col-span-1">
             <img
-              src="/assets/images/logo.png"
+              src="/assets/images/logo-white.webp"
               alt="The Cracking Kernel"
               className="h-14 w-auto mb-4 opacity-70"
             />

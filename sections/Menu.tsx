@@ -3,121 +3,17 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { toast } from "react-hot-toast";
 import AnimatedHeading from "@/components/AnimatedHeading";
 import SectionLabel from "@/components/SectionLabel";
+import { useCartStore } from "@/lib/store";
+import { MenuItem } from "@/lib/types";
+import { menuCategories } from "@/lib/menuData";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const menuCategories = [
-  {
-    category: "Breakfast",
-    image:
-      "https://images.unsplash.com/photo-1525351484163-7529414344d8?q=80&w=800&auto=format&fit=crop",
-    items: [
-      {
-        name: "The Full English",
-        price: "1,650",
-        desc: "Chicken & beef sausages, turkey bacon, fried eggs, hash browns, baked beans, grilled tomatoes, sautéed mushrooms",
-      },
-      {
-        name: "Turkish Eggs (Çılbır)",
-        price: "1,150",
-        desc: "Creamy poached eggs in garlic-herb yogurt, Thai-bird chilli & chilli oil drizzle",
-      },
-      {
-        name: "Shakshuka",
-        price: "1,250",
-        desc: "Fried eggs in spicy marinara with minced chicken, fresh parsley & green onion",
-      },
-      {
-        name: "Avocado Toast",
-        price: "1,050",
-        desc: "Smashed avocado on sourdough, cherry tomatoes, feta & everything seasoning",
-      },
-    ],
-  },
-  {
-    category: "Sandwiches",
-    image:
-      "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?q=80&w=800&auto=format&fit=crop",
-    items: [
-      {
-        name: "Classic Club",
-        price: "1,350",
-        desc: "Triple-decker with chicken, turkey bacon, egg mayo, lettuce & tomato",
-      },
-      {
-        name: "Smoked Chicken Panini",
-        price: "1,250",
-        desc: "Smoked chicken, mozzarella, sun-dried tomatoes, basil pesto on ciabatta",
-      },
-      {
-        name: "Philly Cheesesteak",
-        price: "1,450",
-        desc: "Shaved beef, sautéed peppers & onions, melted provolone on a hoagie roll",
-      },
-      {
-        name: "Falafel Wrap",
-        price: "950",
-        desc: "Crispy falafel, hummus, pickled vegetables, tahini in a warm tortilla",
-      },
-    ],
-  },
-  {
-    category: "Mains",
-    image:
-      "https://images.unsplash.com/photo-1467003909585-2f8a72700288?q=80&w=800&auto=format&fit=crop",
-    items: [
-      {
-        name: "Grilled Chicken Bowl",
-        price: "1,550",
-        desc: "Herb-marinated grilled chicken, quinoa, roasted vegetables, garlic yogurt",
-      },
-      {
-        name: "Fish & Chips",
-        price: "1,650",
-        desc: "Beer-battered fish fillet, hand-cut fries, mushy peas, tartar sauce",
-      },
-      {
-        name: "Pasta Arrabiata",
-        price: "1,250",
-        desc: "Penne in spicy tomato sauce with fresh basil, parmesan shavings",
-      },
-      {
-        name: "Chicken Quesadilla",
-        price: "1,150",
-        desc: "Grilled chicken, bell peppers, cheddar & mozzarella, sour cream & salsa",
-      },
-    ],
-  },
-  {
-    category: "Beverages",
-    image:
-      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=800&auto=format&fit=crop",
-    items: [
-      {
-        name: "Espresso",
-        price: "450",
-        desc: "Double shot of our signature blend",
-      },
-      {
-        name: "Flat White",
-        price: "650",
-        desc: "Velvety microfoam with double espresso",
-      },
-      {
-        name: "European Hot Chocolate",
-        price: "700",
-        desc: "Rich, thick hot chocolate made with real Belgian chocolate",
-      },
-      {
-        name: "Fresh Juices",
-        price: "550",
-        desc: "Seasonal fresh-pressed — orange, watermelon, or mixed berry",
-      },
-    ],
-  },
-];
+const isOnlinePayment =
+  process.env.NEXT_PUBLIC_ONLINE_PAYMENT === "true";
 
 export default function Menu() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -127,6 +23,8 @@ export default function Menu() {
   const imageRef = useRef<HTMLDivElement>(null);
   const [activeTab, setActiveTab] = useState(0);
   const [hoveredItem, setHoveredItem] = useState<number | null>(null);
+  const addToCart = useCartStore((state) => state.addToCart);
+  const showCart = isOnlinePayment;
 
   // Initial scroll-triggered reveals
   useEffect(() => {
@@ -191,7 +89,7 @@ export default function Menu() {
     );
   }, [activeTab]);
 
-  // Animate menu items on tab change
+  // Animate menu items on tab change + refresh ScrollTrigger for downstream pinned sections
   useEffect(() => {
     if (!gridRef.current) return;
 
@@ -205,9 +103,28 @@ export default function Menu() {
         stagger: 0.06,
         duration: 0.5,
         ease: "power3.out",
+        onComplete: () => {
+          ScrollTrigger.refresh();
+        },
       }
     );
   }, [activeTab]);
+
+  const handleAddToCart = (item: (typeof menuCategories)[0]["items"][0]) => {
+    const cartItem: MenuItem = {
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      category: item.category,
+      desc: item.desc,
+      image: item.image,
+    };
+    addToCart(cartItem);
+    toast.success(`${item.name} added to cart!`, {
+      position: "bottom-right",
+      style: { background: "#1A312D", color: "#FFFFFF" },
+    });
+  };
 
   return (
     <section
@@ -237,7 +154,7 @@ export default function Menu() {
         >
           {menuCategories.map((cat, i) => (
             <button
-              key={cat.category}
+              key={cat.slug}
               onClick={() => setActiveTab(i)}
               className={`text-[13px] tracking-[0.12em] uppercase px-5 py-2.5 rounded-full border transition-all duration-400 ${
                 activeTab === i
@@ -257,15 +174,15 @@ export default function Menu() {
           <div className="lg:col-span-5">
             <div
               ref={imageRef}
-              className="aspect-[4/5] overflow-hidden sticky top-28"
+              className="aspect-[4/5] overflow-hidden sticky top-28 relative"
             >
               <img
-                src={menuCategories[activeTab].image}
+                src={menuCategories[activeTab].heroImage}
                 alt={menuCategories[activeTab].category}
                 className="w-full h-full object-cover"
               />
               {/* Category overlay label */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-primary/80 to-transparent">
+              <div className="absolute bottom-0 left-0 right-0 p-6 bg-linear-to-t from-primary/80 to-transparent">
                 <span
                   className="text-white text-2xl md:text-3xl"
                   style={{ fontFamily: "Syne, sans-serif", fontWeight: 700 }}
@@ -280,8 +197,8 @@ export default function Menu() {
           <div ref={gridRef} className="lg:col-span-7 flex flex-col">
             {menuCategories[activeTab].items.map((item, i) => (
               <div
-                key={item.name}
-                className="menu-item group border-b border-primary/6 cursor-pointer"
+                key={item.id}
+                className="menu-item group border-b border-primary/6"
                 onMouseEnter={() => setHoveredItem(i)}
                 onMouseLeave={() => setHoveredItem(null)}
               >
@@ -315,16 +232,40 @@ export default function Menu() {
                     >
                       {item.desc}
                     </p>
+                    {/* Add to Cart Button */}
+                    {showCart && (
+                      <button
+                        onClick={() => handleAddToCart(item)}
+                        className={`mt-3 px-3 py-1.5 bg-primary text-white text-xs md:text-sm rounded transition-all duration-300 hover:bg-primary/90 ${
+                          hoveredItem === i
+                            ? "opacity-100 visible"
+                            : "opacity-0 invisible md:visible md:opacity-100"
+                        }`}
+                      >
+                        + Add to Cart
+                      </button>
+                    )}
                   </div>
-                  <span
-                    className="text-[15px] text-primary/70 group-hover:text-warm shrink-0 transition-colors duration-300 pt-0.5"
-                    style={{
-                      fontFamily: "Syne, sans-serif",
-                      fontWeight: 600,
-                    }}
-                  >
-                    Rs. {item.price}
-                  </span>
+                  <div className="flex flex-col items-end gap-3">
+                    <span
+                      className="text-[15px] text-primary/70 group-hover:text-warm shrink-0 transition-colors duration-300 pt-0.5"
+                      style={{
+                        fontFamily: "Syne, sans-serif",
+                        fontWeight: 600,
+                      }}
+                    >
+                      Rs. {item.price.toLocaleString()}
+                    </span>
+                    {/* Add to Cart Button - Desktop */}
+                    {showCart && (
+                      <button
+                        onClick={() => handleAddToCart(item)}
+                        className="hidden md:block px-4 py-2 bg-warm text-primary text-xs font-semibold rounded hover:bg-warm/90 transition-colors duration-300"
+                      >
+                        Add
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
