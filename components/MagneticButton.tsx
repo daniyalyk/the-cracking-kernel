@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useCallback, useEffect, type ReactNode } from "react";
-import gsap from "gsap";
+import { useRef, type ReactNode } from "react";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 
 interface MagneticButtonProps {
   children: ReactNode;
@@ -11,6 +11,9 @@ interface MagneticButtonProps {
   onClick?: () => void;
 }
 
+const springConfig = { stiffness: 150, damping: 15, mass: 0.5 };
+const innerSpringConfig = { stiffness: 200, damping: 20, mass: 0.5 };
+
 export default function MagneticButton({
   children,
   className = "",
@@ -19,86 +22,54 @@ export default function MagneticButton({
   onClick,
 }: MagneticButtonProps) {
   const buttonRef = useRef<HTMLDivElement>(null);
-  const innerRef = useRef<HTMLDivElement>(null);
 
-  const handleMouseMove = useCallback(
-    (e: MouseEvent) => {
-      const btn = buttonRef.current;
-      const inner = innerRef.current;
-      if (!btn || !inner) return;
+  const outerX = useMotionValue(0);
+  const outerY = useMotionValue(0);
+  const innerX = useMotionValue(0);
+  const innerY = useMotionValue(0);
 
-      const rect = btn.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
+  const springOuterX = useSpring(outerX, springConfig);
+  const springOuterY = useSpring(outerY, springConfig);
+  const springInnerX = useSpring(innerX, innerSpringConfig);
+  const springInnerY = useSpring(innerY, innerSpringConfig);
 
-      gsap.to(btn, {
-        x: x * strength,
-        y: y * strength,
-        duration: 0.4,
-        ease: "power2.out",
-      });
-
-      gsap.to(inner, {
-        x: x * strength * 0.5,
-        y: y * strength * 0.5,
-        duration: 0.4,
-        ease: "power2.out",
-      });
-    },
-    [strength]
-  );
-
-  const handleMouseLeave = useCallback(() => {
-    const btn = buttonRef.current;
-    const inner = innerRef.current;
-    if (!btn || !inner) return;
-
-    gsap.to(btn, {
-      x: 0,
-      y: 0,
-      duration: 0.6,
-      ease: "elastic.out(1, 0.3)",
-    });
-
-    gsap.to(inner, {
-      x: 0,
-      y: 0,
-      duration: 0.6,
-      ease: "elastic.out(1, 0.3)",
-    });
-  }, []);
-
-  useEffect(() => {
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const btn = buttonRef.current;
     if (!btn) return;
+    const rect = btn.getBoundingClientRect();
+    const dx = e.clientX - rect.left - rect.width / 2;
+    const dy = e.clientY - rect.top - rect.height / 2;
+    outerX.set(dx * strength);
+    outerY.set(dy * strength);
+    innerX.set(dx * strength * 0.5);
+    innerY.set(dy * strength * 0.5);
+  };
 
-    btn.addEventListener("mousemove", handleMouseMove);
-    btn.addEventListener("mouseleave", handleMouseLeave);
-
-    return () => {
-      btn.removeEventListener("mousemove", handleMouseMove);
-      btn.removeEventListener("mouseleave", handleMouseLeave);
-    };
-  }, [handleMouseMove, handleMouseLeave]);
+  const handleMouseLeave = () => {
+    outerX.set(0);
+    outerY.set(0);
+    innerX.set(0);
+    innerY.set(0);
+  };
 
   const inner = (
-    <div
-      ref={innerRef}
+    <motion.div
+      style={{ x: springInnerX, y: springInnerY }}
       className={`glow-effect inline-flex items-center justify-center cursor-pointer ${className}`}
     >
       {children}
-    </div>
+    </motion.div>
   );
 
   return (
-    <div ref={buttonRef} className="magnetic-wrap">
-      {href ? (
-        <a href={href} onClick={onClick}>
-          {inner}
-        </a>
-      ) : (
-        <div onClick={onClick}>{inner}</div>
-      )}
-    </div>
+    <motion.div
+      ref={buttonRef}
+      className="magnetic-wrap"
+      style={{ x: springOuterX, y: springOuterY }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      {href ? <a href={href} onClick={onClick}>{inner}</a> : <div onClick={onClick}>{inner}</div>}
+    </motion.div>
   );
 }

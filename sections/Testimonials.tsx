@@ -1,90 +1,52 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { motion } from "framer-motion";
 import AnimatedHeading from "@/components/AnimatedHeading";
 import SectionLabel from "@/components/SectionLabel";
-
-gsap.registerPlugin(ScrollTrigger);
+import { staggerContainer, VIEWPORT, EASE_OUT, EASE_BACK } from "@/animations";
 
 const testimonials = [
   {
-    quote:
-      "The best breakfast spot in DHA. Their Turkish Eggs are unreal and the European hot chocolate is out of this world. Feels like home every time.",
+    quote: "The best breakfast spot in DHA. Their Turkish Eggs are unreal and the European hot chocolate is out of this world. Feels like home every time.",
     name: "Amna K.",
     role: "Regular",
   },
   {
-    quote:
-      "Finally a cafe in Lahore that gets it right — great food, cozy ambiance, and genuine hospitality. The Philly Cheesesteak is a must-try.",
+    quote: "Finally a cafe in Lahore that gets it right — great food, cozy ambiance, and genuine hospitality. The Philly Cheesesteak is a must-try.",
     name: "Hassan R.",
     role: "Food Blogger",
   },
   {
-    quote:
-      "Family-run with so much heart. You can taste the quality in every dish. My kids love the pancakes and I'm addicted to the flat white.",
+    quote: "Family-run with so much heart. You can taste the quality in every dish. My kids love the pancakes and I'm addicted to the flat white.",
     name: "Sarah M.",
     role: "Patron",
   },
 ];
 
+const cardVariants = {
+  hidden:  { y: 50, opacity: 0, scale: 0.97 },
+  visible: (i: number) => ({
+    y: 0, opacity: 1, scale: 1,
+    transition: { duration: 0.8, delay: i * 0.15, ease: EASE_OUT },
+  }),
+};
+
+const quoteVariants = {
+  hidden:  { scale: 0, opacity: 0 },
+  visible: (i: number) => ({
+    scale: 1, opacity: 1,
+    transition: { duration: 0.6, delay: i * 0.15 + 0.3, ease: EASE_BACK },
+  }),
+};
+
+const textChildVariants = {
+  hidden:  { y: 20, opacity: 0 },
+  visible: { y: 0,  opacity: 1, transition: { duration: 0.6, ease: EASE_OUT } },
+};
+
 export default function Testimonials() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      cardsRef.current.forEach((card, i) => {
-        if (!card) return;
-
-        gsap.set(card, { y: 50, opacity: 0, scale: 0.97 });
-
-        ScrollTrigger.create({
-          trigger: card,
-          start: "top 85%",
-          onEnter: () => {
-            gsap.to(card, {
-              y: 0,
-              opacity: 1,
-              scale: 1,
-              duration: 0.8,
-              delay: i * 0.15,
-              ease: "power3.out",
-            });
-
-            const quoteMark = card.querySelector(".quote-mark");
-            if (quoteMark) {
-              gsap.from(quoteMark, {
-                scale: 0,
-                opacity: 0,
-                duration: 0.6,
-                delay: i * 0.15 + 0.3,
-                ease: "back.out(1.7)",
-              });
-            }
-
-            const children = card.querySelectorAll(".testimonial-text > *");
-            gsap.from(children, {
-              y: 20,
-              opacity: 0,
-              stagger: 0.1,
-              duration: 0.6,
-              delay: i * 0.15 + 0.2,
-              ease: "power3.out",
-            });
-          },
-          once: true,
-        });
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section
-      ref={sectionRef}
       className="py-24 md:py-40 px-6 md:px-12 lg:px-24 bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: "url('/assets/images/app-bg.png')" }}
     >
@@ -100,40 +62,48 @@ export default function Testimonials() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6 lg:gap-10">
           {testimonials.map((testimonial, i) => (
-            <div
+            <motion.div
               key={testimonial.name}
-              ref={(el) => {
-                cardsRef.current[i] = el;
-              }}
+              custom={i}
+              variants={cardVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
               className="group p-8 md:p-10 border border-primary/6 hover:border-warm/25 transition-colors duration-500 cursor-default"
             >
-              <span className="quote-mark block text-5xl text-warm/30 leading-none mb-6"
+              <motion.span
+                custom={i}
+                variants={quoteVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="quote-mark block text-5xl text-warm/30 leading-none mb-6"
                 style={{ fontFamily: "Georgia, serif" }}
               >
                 &ldquo;
-              </span>
+              </motion.span>
 
-              <div className="testimonial-text">
-                <p className="text-text-secondary leading-[1.8] mb-8 text-[14px] md:text-[15px]">
+              <motion.div
+                className="testimonial-text"
+                variants={staggerContainer(0.1, i * 0.15 + 0.2)}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+              >
+                <motion.p variants={textChildVariants} className="text-text-secondary leading-[1.8] mb-8 text-[14px] md:text-[15px]">
                   {testimonial.quote}
-                </p>
-
-                <div className="flex items-center gap-3">
+                </motion.p>
+                <motion.div variants={textChildVariants} className="flex items-center gap-3">
                   <div className="w-8 h-px bg-warm" />
                   <div>
-                    <span
-                      className="block text-sm text-primary"
-                      style={{ fontFamily: "Syne, sans-serif", fontWeight: 600 }}
-                    >
+                    <span className="block text-sm text-primary" style={{ fontFamily: "Syne, sans-serif", fontWeight: 600 }}>
                       {testimonial.name}
                     </span>
-                    <span className="text-xs text-text-light">
-                      {testimonial.role}
-                    </span>
+                    <span className="text-xs text-text-light">{testimonial.role}</span>
                   </div>
-                </div>
-              </div>
-            </div>
+                </motion.div>
+              </motion.div>
+            </motion.div>
           ))}
         </div>
       </div>

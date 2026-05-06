@@ -1,10 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
+import { motion } from "framer-motion";
+import { EASE_OUT } from "@/animations";
 
 interface AnimatedHeadingProps {
   text: string;
@@ -15,6 +12,16 @@ interface AnimatedHeadingProps {
   splitBy?: "words" | "chars";
 }
 
+const containerVariants = (stagger: number) => ({
+  hidden: {},
+  visible: { transition: { staggerChildren: stagger } },
+});
+
+const unitVariants = (delay: number) => ({
+  hidden:  { y: "110%" as const },
+  visible: { y: "0%"  as const, transition: { duration: 1, ease: EASE_OUT, delay } },
+});
+
 export default function AnimatedHeading({
   text,
   tag: Tag = "h2",
@@ -23,59 +30,44 @@ export default function AnimatedHeading({
   scrollTrigger = true,
   splitBy = "words",
 }: AnimatedHeadingProps) {
-  const ref = useRef<HTMLElement>(null);
+  const units  = splitBy === "words" ? text.split(" ") : text.split("");
+  const stagger = splitBy === "chars" ? 0.02 : 0.06;
 
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
+  const triggerProps = scrollTrigger
+    ? { whileInView: "visible" as const, viewport: { once: true, amount: 0.5 } }
+    : { animate: "visible" as const };
 
-    const units =
-      splitBy === "words" ? text.split(" ") : text.split("");
-
-    el.innerHTML = units
-      .map((unit) => {
-        const display = unit === " " ? "&nbsp;" : unit;
-        return `<span style="display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:6px"><span class="anim-unit" style="display:inline-block;transform:translateY(110%)">${display}</span></span>`;
-      })
-      .join(
-        splitBy === "words"
-          ? '<span style="display:inline-block;width:0.3em"></span>'
-          : ""
-      );
-
-    const animUnits = el.querySelectorAll(".anim-unit");
-
-    if (scrollTrigger) {
-      ScrollTrigger.create({
-        trigger: el,
-        start: "top 85%",
-        onEnter: () => {
-          gsap.to(animUnits, {
-            y: "0%",
-            duration: 1,
-            stagger: splitBy === "chars" ? 0.02 : 0.06,
-            delay,
-            ease: "power4.out",
-          });
-        },
-        once: true,
-      });
-    } else {
-      gsap.to(animUnits, {
-        y: "0%",
-        duration: 1,
-        stagger: splitBy === "chars" ? 0.02 : 0.06,
-        delay,
-        ease: "power4.out",
-      });
-    }
-
-    return () => {
-      ScrollTrigger.getAll().forEach((t) => {
-        if (t.trigger === el) t.kill();
-      });
-    };
-  }, [text, delay, scrollTrigger, splitBy]);
-
-  return <Tag ref={ref as React.Ref<HTMLHeadingElement>} className={className}>{text}</Tag>;
+  return (
+    <Tag className={className}>
+      <motion.span
+        variants={containerVariants(stagger)}
+        initial="hidden"
+        {...triggerProps}
+        style={{ display: "inline" }}
+      >
+        {units.map((unit, i) => (
+          <span key={i} style={{ display: "inline-block" }}>
+            <span
+              style={{
+                display: "inline-block",
+                overflow: "hidden",
+                verticalAlign: "top",
+                paddingBottom: "6px",
+              }}
+            >
+              <motion.span
+                variants={unitVariants(delay)}
+                style={{ display: "inline-block" }}
+              >
+                {unit === " " ? "\u00A0" : unit}
+              </motion.span>
+            </span>
+            {splitBy === "words" && i < units.length - 1 && (
+              <span style={{ display: "inline-block", width: "0.3em" }} />
+            )}
+          </span>
+        ))}
+      </motion.span>
+    </Tag>
+  );
 }

@@ -1,131 +1,162 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
+import { motion } from "framer-motion";
+import { EASE_OUT } from "@/animations";
 
 export default function Hero() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-
+  // Dispatch heroVideoReady so Navbar slides in once the main elements are visible
   useEffect(() => {
-    const videoEl = videoRef.current;
-    if (!videoEl) return;
-
-    // Lock scroll while the intro plays
-    document.body.style.overflow = "hidden";
-
-    // Ensure muted is set as a property (iOS requires this)
-    videoEl.muted = true;
-
-    let navbarTriggered = false;
-    const LOOP_START = 6;
-
-    const triggerNavbar = () => {
-      if (!navbarTriggered) {
-        navbarTriggered = true;
-        window.dispatchEvent(new CustomEvent("heroVideoReady"));
-      }
-    };
-
-    // Skip the intro gracefully — unlock scroll, show navbar, show first frame
-    const skipIntro = () => {
-      document.body.style.overflow = "";
-      triggerNavbar();
-    };
-
-    const onTimeUpdate = () => {
-      if (!navbarTriggered && videoEl.currentTime >= 6) {
-        triggerNavbar();
-      }
-    };
-
-    // Yo-yo loop: chain seeks via the "seeked" event so each frame
-    // actually decodes and renders before we move to the next one.
-    const STEP = 1 / 30;
-    let direction = -1;
-    let yoyoTime = 0;
-    let yoyoActive = false;
-
-    const onSeeked = () => {
-      if (!yoyoActive) return;
-      yoyoTime += direction * STEP;
-      if (yoyoTime <= LOOP_START) {
-        yoyoTime = LOOP_START;
-        direction = 1;
-      } else if (yoyoTime >= videoEl.duration) {
-        yoyoTime = videoEl.duration;
-        direction = -1;
-      }
-      videoEl.currentTime = yoyoTime;
-    };
-
-    const onEnded = () => {
-      document.body.style.overflow = "";
-
-      videoEl.pause();
-      yoyoActive = true;
-      yoyoTime = videoEl.duration;
-      direction = -1;
-      videoEl.addEventListener("seeked", onSeeked);
-      videoEl.currentTime = yoyoTime - STEP;
-    };
-
-    videoEl.addEventListener("timeupdate", onTimeUpdate);
-    videoEl.addEventListener("ended", onEnded);
-
-    // Attempt autoplay — if blocked, skip intro silently (no play button)
-    const attemptPlay = () => {
-      const p = videoEl.play();
-      if (p !== undefined) {
-        p.catch(() => {
-          // Retry once after video data is ready
-          const retry = () => {
-            videoEl.removeEventListener("canplay", retry);
-            const p2 = videoEl.play();
-            if (p2 !== undefined) {
-              p2.catch(() => {
-                // Autoplay truly blocked — skip intro, no play icon
-                skipIntro();
-              });
-            }
-          };
-          if (videoEl.readyState >= 3) {
-            retry();
-          } else {
-            videoEl.addEventListener("canplay", retry);
-          }
-        });
-      }
-    };
-
-    attemptPlay();
-
-    return () => {
-      yoyoActive = false;
-      videoEl.removeEventListener("timeupdate", onTimeUpdate);
-      videoEl.removeEventListener("ended", onEnded);
-      videoEl.removeEventListener("seeked", onSeeked);
-      document.body.style.overflow = "";
-    };
+    const id = setTimeout(() => {
+      window.dispatchEvent(new CustomEvent("heroVideoReady"));
+    }, 1400);
+    return () => clearTimeout(id);
   }, []);
 
   return (
     <section
-      ref={sectionRef}
-      className="relative h-screen w-full overflow-hidden"
+      id="hero"
+      className="relative h-screen w-full overflow-hidden bg-primary flex items-center"
     >
-      <video
-        ref={videoRef}
-        autoPlay
-        muted
-        playsInline
-        preload="auto"
-        className="absolute inset-0 w-full h-full object-cover"
-      >
-        <source
-          src="/assets/videos/tck_bird_animation.mp4"
-          type="video/mp4"
+      {/* ── Background illustration ── */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <motion.img
+          src="/assets/images/hero-illustration.png"
+          alt=""
+          aria-hidden
+          className="h-[105%] w-auto max-w-none select-none pointer-events-none"
+          style={{
+            filter:
+              "drop-shadow(0 32px 80px rgba(200,169,126,0.18)) drop-shadow(0 8px 24px rgba(0,0,0,0.55))",
+          }}
+          draggable={false}
+          initial={{ scale: 1.04, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1, y: [0, -14, 0] }}
+          transition={{
+            scale:   { duration: 1.8, delay: 0.2, ease: EASE_OUT },
+            opacity: { duration: 1.8, delay: 0.2, ease: EASE_OUT },
+            y:       { duration: 4.2, delay: 2.5, ease: "easeInOut", repeat: Infinity, repeatType: "loop" },
+          }}
         />
-      </video>
+      </div>
+
+      {/* Left-to-right readability gradient */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(to right, #1A312D 28%, rgba(26,49,45,0.82) 46%, rgba(26,49,45,0.35) 65%, transparent 82%)",
+        }}
+      />
+
+      {/* Bottom vignette */}
+      <div
+        className="absolute inset-x-0 bottom-0 h-40 pointer-events-none"
+        style={{ background: "linear-gradient(to top, #1A312D, transparent)" }}
+      />
+
+      {/* Grain texture */}
+      <div
+        className="absolute inset-0 pointer-events-none z-10 opacity-[0.15]"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+          backgroundRepeat: "repeat",
+          backgroundSize: "200px 200px",
+          mixBlendMode: "overlay",
+        }}
+      />
+
+      {/* ── Text content ── */}
+      <div className="relative z-20 w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-16">
+        <div className="max-w-xl">
+
+          {/* Headline — each word in an overflow-hidden clip row */}
+          <div className="space-y-0 mb-8 md:mb-10">
+            {(["The", "Cracking", "Kernel"] as const).map((word, i) => (
+              <div key={word} className="w-full">
+                <motion.h1
+                  className={`block leading-[0.92] ${
+                    i === 2 ? "text-warm italic font-light" : "text-white font-extrabold"
+                  }`}
+                  style={{ fontFamily: "Syne, sans-serif", fontSize: "clamp(3.2rem, 7.5vw, 6.5rem)" }}
+                  initial={{ y: 90, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 1.0, delay: 0.8 + i * 0.1, ease: EASE_OUT }}
+                >
+                  {word}
+                </motion.h1>
+              </div>
+            ))}
+          </div>
+
+          {/* Tagline */}
+          <motion.p
+            className="text-white/50 text-[13.5px] leading-[1.85] max-w-[320px] mb-10 md:mb-12"
+            initial={{ y: 24, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.8, delay: 1.2, ease: EASE_OUT }}
+          >
+            Where every morning cracks open a little differently.
+            <br />
+            Coffee, deli food &amp; good people — served fresh.
+          </motion.p>
+
+          {/* CTAs */}
+          <motion.div
+            className="flex items-center gap-7"
+            initial={{ y: 24, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.8, delay: 1.35, ease: EASE_OUT }}
+          >
+            <button
+              onClick={() => document.getElementById("menu")?.scrollIntoView({ behavior: "smooth" })}
+              className="px-7 py-3.5 bg-warm text-primary text-[11px] tracking-[0.22em] uppercase font-bold hover:bg-warm-light transition-colors duration-300 cursor-pointer"
+              style={{ fontFamily: "Syne, sans-serif" }}
+            >
+              View Menu
+            </button>
+            <button
+              onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })}
+              className="flex items-center gap-2.5 text-white/55 text-[11px] tracking-[0.22em] uppercase hover:text-white transition-colors duration-300 cursor-pointer"
+              style={{ fontFamily: "Syne, sans-serif" }}
+            >
+              Our Story
+              <svg width="16" height="10" viewBox="0 0 16 10" fill="none" className="text-warm">
+                <path d="M0 5h14M10 1l4 4-4 4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Left vertical decoration */}
+      <motion.div
+        className="hidden lg:flex absolute left-6 xl:left-10 bottom-10 flex-col items-center gap-3 pointer-events-none z-20"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.7, delay: 1.5 }}
+      >
+        <div className="w-px h-14 bg-gradient-to-b from-white/20 to-transparent" />
+        <span
+          className="text-white/20 text-[9px] tracking-[0.45em] uppercase"
+          style={{ fontFamily: "Syne, sans-serif", writingMode: "vertical-rl", transform: "rotate(180deg)" }}
+        >
+          Est. 2024
+        </span>
+      </motion.div>
+
+      {/* Bottom scroll cue */}
+      <motion.div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none z-20"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.7, delay: 1.6 }}
+      >
+        <span className="text-white/30 text-[9px] tracking-[0.4em] uppercase" style={{ fontFamily: "Syne, sans-serif" }}>
+          Scroll
+        </span>
+        <div className="w-px h-10 bg-gradient-to-b from-white/30 to-transparent" />
+      </motion.div>
     </section>
   );
 }

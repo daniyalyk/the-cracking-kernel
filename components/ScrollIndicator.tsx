@@ -1,55 +1,33 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { EASE_OUT } from "@/animations";
 
 export default function ScrollIndicator() {
-  const ref = useRef<HTMLDivElement>(null);
+  const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    gsap.set(el, { opacity: 0, y: 20 });
-
-    gsap.to(el, {
-      opacity: 1,
-      y: 0,
-      duration: 1,
-      delay: 2.5,
-      ease: "power3.out",
-    });
-
-    // Bounce animation
-    gsap.to(el.querySelector(".scroll-dot"), {
-      y: 8,
-      duration: 1,
-      repeat: -1,
-      yoyo: true,
-      ease: "power1.inOut",
-    });
-
-    // Hide on scroll
-    const handleScroll = () => {
-      if (window.scrollY > 200) {
-        gsap.to(el, { opacity: 0, duration: 0.3 });
-      } else {
-        gsap.to(el, { opacity: 1, duration: 0.3 });
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const onScroll = () => setHidden(window.scrollY > 200);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
-    <div ref={ref} className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
-      <span className="text-white/50 text-xs tracking-[0.3em] uppercase">
-        Scroll
-      </span>
+    <motion.div
+      className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: hidden ? 0 : 1, y: 0 }}
+      transition={{ duration: hidden ? 0.3 : 1, delay: hidden ? 0 : 2.5, ease: EASE_OUT }}
+    >
+      <span className="text-white/50 text-xs tracking-[0.3em] uppercase">Scroll</span>
       <div className="w-[1px] h-12 bg-white/20 relative overflow-hidden rounded-full">
-        <div className="scroll-dot w-[3px] h-[3px] bg-warm rounded-full absolute -left-[1px] top-0" />
+        <motion.div
+          className="w-[3px] h-[3px] bg-warm rounded-full absolute -left-[1px] top-0"
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 1, ease: "easeInOut", repeat: Infinity }}
+        />
       </div>
-    </div>
+    </motion.div>
   );
 }

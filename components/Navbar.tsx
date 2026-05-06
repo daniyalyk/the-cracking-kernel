@@ -1,112 +1,82 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import CartIcon from "./CartIcon";
 import Cart from "./Cart";
+import { EASE_OUT, EASE_INOUT } from "@/animations";
 
-const isOnlinePayment =
-  process.env.NEXT_PUBLIC_ONLINE_PAYMENT === "true";
+const isOnlinePayment = process.env.NEXT_PUBLIC_ONLINE_PAYMENT === "true";
+
+const linkVariants = {
+  closed: { y: 50, opacity: 0 },
+  open:   { y: 0,  opacity: 1 },
+};
 
 export default function Navbar() {
-  const navRef = useRef<HTMLElement>(null);
-  const [isOpen, setIsOpen] = useState(false);
+  const [visible,    setVisible]    = useState(false);
+  const [scrolled,   setScrolled]   = useState(false);
+  const [isOpen,     setIsOpen]     = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
-  const tlRef = useRef<gsap.core.Timeline | null>(null);
 
+  const { scrollY } = useScroll();
+
+  // Reveal on heroVideoReady
   useEffect(() => {
-    const nav = navRef.current;
-    if (!nav) return;
-
-    gsap.set(nav, { y: -100, opacity: 0 });
-
-    const handleHeroReady = () => {
-      gsap.to(nav, {
-        y: 0,
-        opacity: 1,
-        duration: 2,
-        ease: "power3.out",
-      });
-    };
-
-    window.addEventListener("heroVideoReady", handleHeroReady);
-
-    const handleScroll = () => {
-      if (window.scrollY > 80) {
-        gsap.to(nav, {
-          backgroundColor: "rgba(26, 49, 45, 0.97)",
-          backdropFilter: "blur(20px)",
-          borderBottom: "1px solid rgba(255,255,255,0.06)",
-          duration: 0.3,
-        });
-      } else {
-        gsap.to(nav, {
-          backgroundColor: "rgba(26, 49, 45, 0)",
-          backdropFilter: "blur(0px)",
-          borderBottom: "1px solid rgba(255,255,255,0)",
-          duration: 0.3,
-        });
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("heroVideoReady", handleHeroReady);
-      window.removeEventListener("scroll", handleScroll);
-    };
+    const handler = () => setVisible(true);
+    window.addEventListener("heroVideoReady", handler);
+    return () => window.removeEventListener("heroVideoReady", handler);
   }, []);
 
+  // Scroll-based background
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    setScrolled(latest > 80);
+  });
+
+  // Body scroll lock when mobile menu open
   useEffect(() => {
-    if (!menuRef.current) return;
-
-    if (tlRef.current) tlRef.current.kill();
-
-    const links = menuRef.current.querySelectorAll("a");
-
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-      tlRef.current = gsap.timeline();
-      tlRef.current
-        .to(menuRef.current, {
-          clipPath: "inset(0% 0% 0% 0%)",
-          duration: 0.6,
-          ease: "power4.inOut",
-        })
-        .from(
-          links,
-          { y: 50, opacity: 0, stagger: 0.08, duration: 0.6, ease: "power3.out" },
-          "-=0.2"
-        );
-    } else {
-      document.body.style.overflow = "";
-      tlRef.current = gsap.timeline();
-      tlRef.current.to(menuRef.current, {
-        clipPath: "inset(0% 0% 100% 0%)",
-        duration: 0.5,
-        ease: "power4.inOut",
-      });
-    }
+    document.body.style.overflow = isOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
   }, [isOpen]);
 
   const navLinks = [
-    { label: "About", target: "about" },
-    { label: "Menu", target: "menu" },
-    { label: "Gallery", target: "gallery" },
+    { label: "About",   target: "about"  },
+    { label: "Menu",    target: "menu"   },
+    { label: "Gallery", target: "gallery"},
     { label: "Visit Us", target: "visit" },
   ];
 
   const scrollTo = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
     <>
-      <nav
-        ref={navRef}
-        className="fixed top-0 left-0 right-0 z-50 px-6 md:px-12 lg:px-16 py-4 flex items-center justify-between"
-        style={{ backgroundColor: "rgba(26, 49, 45, 0)" }}
+      <motion.nav
+        className={`fixed top-0 left-0 right-0 z-50 px-6 md:px-12 lg:px-16 py-4 flex items-center justify-between border-b transition-[backdrop-filter] duration-300 ${
+          scrolled ? "backdrop-blur-xl" : ""
+        }`}
+        initial={{ y: -100, opacity: 0 }}
+        animate={
+          visible
+            ? {
+                y: 0,
+                opacity: 1,
+                backgroundColor: scrolled
+                  ? "rgba(26, 49, 45, 0.97)"
+                  : "rgba(26, 49, 45, 0)",
+                borderColor: scrolled
+                  ? "rgba(255,255,255,0.06)"
+                  : "rgba(255,255,255,0)",
+              }
+            : { y: -100, opacity: 0 }
+        }
+        transition={{
+          y:               { duration: visible ? 2 : 0.3, ease: EASE_OUT },
+          opacity:         { duration: visible ? 2 : 0.3, ease: EASE_OUT },
+          backgroundColor: { duration: 0.3 },
+          borderColor:     { duration: 0.3 },
+        }}
       >
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
@@ -119,7 +89,7 @@ export default function Navbar() {
           />
         </button>
 
-        {/* Desktop nav */}
+        {/* Desktop links */}
         <div className="hidden md:flex items-center gap-10">
           {navLinks.map((link) => (
             <button
@@ -134,55 +104,57 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* Cart Icon and Mobile Menu */}
         <div className="flex items-center gap-4">
-          {/* Cart Icon */}
-          {isOnlinePayment && (
-            <CartIcon onClick={() => setIsCartOpen(true)} />
-          )}
+          {isOnlinePayment && <CartIcon onClick={() => setIsCartOpen(true)} />}
 
-          {/* Mobile hamburger */}
+          {/* Hamburger */}
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="md:hidden flex flex-col gap-[5px] z-50 p-2"
             aria-label="Toggle menu"
           >
-            <span
-              className={`block w-6 h-[1.5px] bg-white transition-all duration-300 ${
-                isOpen ? "rotate-45 translate-y-[3.25px]" : ""
-              }`}
+            <motion.span
+              className="block w-6 h-[1.5px] bg-white"
+              animate={{ rotate: isOpen ? 45 : 0, y: isOpen ? 3.25 : 0 }}
+              transition={{ duration: 0.3 }}
             />
-            <span
-              className={`block w-6 h-[1.5px] bg-white transition-all duration-300 ${
-                isOpen ? "-rotate-45 -translate-y-[3.25px]" : ""
-              }`}
+            <motion.span
+              className="block w-6 h-[1.5px] bg-white"
+              animate={{ rotate: isOpen ? -45 : 0, y: isOpen ? -3.25 : 0 }}
+              transition={{ duration: 0.3 }}
             />
           </button>
         </div>
-      </nav>
+      </motion.nav>
 
       {/* Mobile fullscreen menu */}
-      <div
-        ref={menuRef}
-        className="fixed inset-0 z-40 bg-primary flex flex-col items-center justify-center gap-10 md:hidden"
-        style={{ clipPath: "inset(0% 0% 100% 0%)" }}
-      >
-        {navLinks.map((link) => (
-          <button
-            key={link.label}
-            onClick={() => {
-              setIsOpen(false);
-              scrollTo(link.target);
-            }}
-            className="text-white text-3xl font-light tracking-[0.15em] uppercase hover:text-warm transition-colors duration-300 cursor-pointer"
-            style={{ fontFamily: "Syne, sans-serif" }}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            className="fixed inset-0 z-40 bg-primary flex flex-col items-center justify-center gap-10 md:hidden"
+            initial={{ clipPath: "inset(0% 0% 100% 0%)" }}
+            animate={{ clipPath: "inset(0% 0% 0% 0%)" }}
+            exit={{    clipPath: "inset(0% 0% 100% 0%)" }}
+            transition={{ duration: 0.5, ease: EASE_INOUT }}
           >
-            {link.label}
-          </button>
-        ))}
-      </div>
+            {navLinks.map((link, i) => (
+              <motion.button
+                key={link.label}
+                variants={linkVariants}
+                initial="closed"
+                animate="open"
+                transition={{ duration: 0.6, delay: 0.15 + i * 0.08, ease: EASE_OUT }}
+                onClick={() => { setIsOpen(false); scrollTo(link.target); }}
+                className="text-white text-3xl font-light tracking-[0.15em] uppercase hover:text-warm transition-colors duration-300 cursor-pointer"
+                style={{ fontFamily: "Syne, sans-serif" }}
+              >
+                {link.label}
+              </motion.button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {/* Cart Drawer */}
       {isOnlinePayment && (
         <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
       )}

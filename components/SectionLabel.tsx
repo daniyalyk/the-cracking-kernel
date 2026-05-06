@@ -1,6 +1,7 @@
 "use client";
 
-import { useScrollReveal } from "@/hooks/useGSAP";
+import { motion } from "framer-motion";
+import { fadeInUp, VIEWPORT } from "@/animations";
 
 interface SectionLabelProps {
   text: string;
@@ -9,10 +10,14 @@ interface SectionLabelProps {
 }
 
 export default function SectionLabel({ text, className = "", light = false }: SectionLabelProps) {
-  const ref = useScrollReveal<HTMLDivElement>({ y: 20, duration: 0.8 });
-
   return (
-    <div ref={ref} className={`flex items-center gap-4 ${className}`}>
+    <motion.div
+      variants={fadeInUp}
+      initial="hidden"
+      whileInView="visible"
+      viewport={VIEWPORT}
+      className={`flex items-center gap-4 ${className}`}
+    >
       <div className={`w-8 h-px ${light ? "bg-white/40" : "bg-primary/30"}`} />
       <span
         className={`text-xs tracking-[0.3em] uppercase ${
@@ -21,6 +26,6 @@ export default function SectionLabel({ text, className = "", light = false }: Se
       >
         {text}
       </span>
-    </div>
+    </motion.div>
   );
 }

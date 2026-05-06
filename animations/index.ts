@@ -1,120 +1,54 @@
-"use client";
+import type { Variants } from "framer-motion";
 
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+// ── Shared easing curves ────────────────────────────────────────────────────
+export const EASE_OUT   = [0.16, 1, 0.3, 1]    as const; // power3.out equivalent
+export const EASE_INOUT = [0.76, 0, 0.24, 1]   as const; // power3.inOut equivalent
+export const EASE_BACK  = [0.34, 1.56, 0.64, 1] as const; // back.out(1.4) equivalent
 
-gsap.registerPlugin(ScrollTrigger);
+// ── Shared viewport config ───────────────────────────────────────────────────
+export const VIEWPORT = { once: true, amount: 0.15 } as const;
 
-export function createScrollTimeline(
-  trigger: HTMLElement,
-  options: {
-    start?: string;
-    end?: string;
-    scrub?: boolean | number;
-    pin?: boolean;
-    anticipatePin?: number;
-    onEnter?: () => void;
-  } = {}
-) {
-  const tl = gsap.timeline({
-    scrollTrigger: {
-      trigger,
-      start: options.start || "top 80%",
-      end: options.end || "bottom 20%",
-      scrub: options.scrub ?? false,
-      pin: options.pin || false,
-      anticipatePin: options.anticipatePin || 0,
-      ...( options.onEnter ? { onEnter: options.onEnter } : {} ),
-    },
-  });
-  return tl;
-}
+// ── Reusable variants ────────────────────────────────────────────────────────
 
-export function fadeInUp(
-  elements: gsap.TweenTarget,
-  options: {
-    y?: number;
-    duration?: number;
-    stagger?: number;
-    delay?: number;
-    ease?: string;
-  } = {}
-) {
-  return gsap.from(elements, {
-    y: options.y || 60,
-    opacity: 0,
-    duration: options.duration || 1,
-    stagger: options.stagger || 0,
-    delay: options.delay || 0,
-    ease: options.ease || "power3.out",
-  });
-}
+export const fadeInUp: Variants = {
+  hidden:  { y: 40, opacity: 0 },
+  visible: { y: 0,  opacity: 1, transition: { duration: 0.8, ease: EASE_OUT } },
+};
 
-export function scaleIn(
-  elements: gsap.TweenTarget,
-  options: {
-    scale?: number;
-    duration?: number;
-    delay?: number;
-    ease?: string;
-  } = {}
-) {
-  return gsap.from(elements, {
-    scale: options.scale || 0.8,
-    opacity: 0,
-    duration: options.duration || 1,
-    delay: options.delay || 0,
-    ease: options.ease || "power3.out",
-  });
-}
+export const fadeIn: Variants = {
+  hidden:  { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 0.7, ease: EASE_OUT } },
+};
 
-export function horizontalScroll(
-  container: HTMLElement,
-  scrollContainer: HTMLElement
-) {
-  const totalWidth = scrollContainer.scrollWidth - container.offsetWidth;
+export const scaleIn: Variants = {
+  hidden:  { scale: 0.85, opacity: 0 },
+  visible: { scale: 1,    opacity: 1, transition: { duration: 0.8, ease: EASE_OUT } },
+};
 
-  return gsap.to(scrollContainer, {
-    x: -totalWidth,
-    ease: "none",
-    scrollTrigger: {
-      trigger: container,
-      start: "top top",
-      end: () => `+=${totalWidth}`,
-      scrub: 1,
-      pin: true,
-      anticipatePin: 1,
-      invalidateOnRefresh: true,
-    },
-  });
-}
+/** Word/line slide-up from overflow-hidden container */
+export const slideUpReveal: Variants = {
+  hidden:  { y: "110%" },
+  visible: { y: "0%",   transition: { duration: 1, ease: EASE_OUT } },
+};
 
-export function maskReveal(
-  element: gsap.TweenTarget,
-  options: {
-    direction?: "up" | "down" | "left" | "right";
-    duration?: number;
-    delay?: number;
-    ease?: string;
-  } = {}
-) {
-  const { direction = "up", duration = 1.2, delay = 0, ease = "power3.inOut" } = options;
+/** Clip-path reveal from bottom */
+export const maskReveal: Variants = {
+  hidden:  { clipPath: "inset(0 0 100% 0)", scale: 1.1 },
+  visible: { clipPath: "inset(0 0 0% 0)",   scale: 1,
+    transition: { duration: 0.8, ease: EASE_INOUT } },
+};
 
-  const clipPaths: Record<string, { from: string; to: string }> = {
-    up: { from: "inset(100% 0 0 0)", to: "inset(0% 0 0 0)" },
-    down: { from: "inset(0 0 100% 0)", to: "inset(0 0 0% 0)" },
-    left: { from: "inset(0 100% 0 0)", to: "inset(0 0% 0 0)" },
-    right: { from: "inset(0 0 0 100%)", to: "inset(0 0 0 0%)" },
-  };
+/** Horizontal line draw from left */
+export const lineReveal: Variants = {
+  hidden:  { scaleX: 0 },
+  visible: { scaleX: 1, transition: { duration: 1.2, ease: EASE_INOUT } },
+};
 
-  gsap.set(element, { clipPath: clipPaths[direction].from });
-
-  return gsap.to(element, {
-    clipPath: clipPaths[direction].to,
-    duration,
-    delay,
-    ease,
-  });
-}
-
-export { gsap, ScrollTrigger };
+/** Stagger container — call as a function so children share timing */
+export const staggerContainer = (
+  staggerChildren = 0.1,
+  delayChildren   = 0,
+): Variants => ({
+  hidden:  {},
+  visible: { transition: { staggerChildren, delayChildren } },
+});
