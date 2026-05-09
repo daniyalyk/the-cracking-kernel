@@ -99,7 +99,7 @@ export default function Menu() {
                     ? "border-warm bg-warm text-primary"
                     : "border-white/20 text-white/55 hover:border-white/40 hover:text-white"
                 }`}
-                style={{ fontFamily: "Syne, sans-serif" }}
+                style={{ fontFamily: "Whyte, sans-serif" }}
               >
                 {cat.category}
               </motion.button>
@@ -138,10 +138,27 @@ export default function Menu() {
                       />
                       </a>
                     <div className="absolute bottom-0 left-0 right-0 p-6 bg-linear-to-t from-primary/80 to-transparent">
-                      <span className="text-white text-2xl md:text-3xl" style={{ fontFamily: "Syne, sans-serif", fontWeight: 700 }}>
+                      <span className="text-white text-2xl md:text-3xl" style={{ fontFamily: "Royale, serif" }}>
                         {menuCategories[activeTab].category}
                       </span>
                     </div>
+                    <AnimatePresence>
+                      {activeTab === 0 && (
+                        <motion.div
+                          key="brunch-hours"
+                          initial={{ opacity: 0, y: -8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -8 }}
+                          transition={{ duration: 0.4, ease: EASE_OUT }}
+                          className="absolute top-4 left-4 inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/20 bg-primary/70 backdrop-blur-sm z-10"
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-warm animate-pulse" />
+                          <span className="text-white text-[11px] tracking-[0.18em] uppercase" style={{ fontFamily: "Whyte, sans-serif" }}>
+                            10AM – 1PM &nbsp;|&nbsp; Sat &amp; Sun
+                          </span>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </motion.div>
                 </AnimatePresence>
               </div>
@@ -166,7 +183,7 @@ export default function Menu() {
                     <div className="py-6 md:py-7 flex items-start justify-between gap-4 transition-all duration-300 group-hover:pl-3">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-1.5">
-                          <h4 className="text-[17px] md:text-lg text-primary transition-colors duration-300 group-hover:text-warm" style={{ fontFamily: "Syne, sans-serif", fontWeight: 500 }}>
+                          <h4 className="text-[17px] md:text-lg text-primary transition-colors duration-300 group-hover:text-warm">
                             {item.name}
                           </h4>
                           <div className={`w-1.5 h-1.5 rounded-full bg-warm transition-all duration-300 ${hoveredItem === i ? "opacity-100 scale-100" : "opacity-0 scale-0"}`} />
@@ -184,7 +201,7 @@ export default function Menu() {
                         )}
                       </div>
                       <div className="flex flex-col items-end gap-3">
-                        <span className="text-[15px] text-primary/70 group-hover:text-warm shrink-0 transition-colors duration-300 pt-0.5" style={{ fontFamily: "Syne, sans-serif", fontWeight: 600 }}>
+                        <span className="text-[15px] text-primary/70 group-hover:text-warm shrink-0 transition-colors duration-300 pt-0.5" style={{ fontFamily: "Whyte, sans-serif", fontWeight: 600 }}>
                           Rs. {item.price.toLocaleString()}
                         </span>
                         {showCart && (

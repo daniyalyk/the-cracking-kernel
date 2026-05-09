@@ -111,15 +111,13 @@ export default function About() {
             <span
               key={i}
               className="flex items-center gap-12 text-primary text-sm tracking-[0.3em] uppercase shrink-0"
-              style={{ fontFamily: "Syne, sans-serif" }}
+              style={{ fontFamily: "Whyte, sans-serif" }}
             >
-              <span>Good Food</span><span className="text-warm/40">✦</span>
-              <span>Good People</span><span className="text-warm/40">✦</span>
-              <span>Good Vibes</span><span className="text-warm/40">✦</span>
+              <span>Comfort Food</span><span className="text-warm/40">✦</span>
+              <span>Coffee</span><span className="text-warm/40">✦</span>
+              <span>Patisserie</span><span className="text-warm/40">✦</span>
               <span>Fresh Ingredients</span><span className="text-warm/40">✦</span>
-              <span>Family Owned</span><span className="text-warm/40">✦</span>
-              <span>DHA Phase 5</span><span className="text-warm/40">✦</span>
-              <span>Lahore</span><span className="text-warm/40">✦</span>
+              <span>Love</span><span className="text-warm/40">✦</span>
             </span>
           ))}
         </motion.div>
@@ -137,25 +135,13 @@ export default function About() {
             whileInView="visible"
             viewport={VIEWPORT}
           >
-            <motion.div variants={headingChildVariants} className="flex items-center justify-center gap-3 mb-6">
-              <div className="w-10 h-px bg-primary/40" />
-              <span className="text-xs tracking-[0.3em] uppercase text-primary" style={{ fontFamily: "Syne, sans-serif" }}>
-                Our Story
-              </span>
-              <div className="w-10 h-px bg-primary/40" />
-            </motion.div>
-            <motion.h2
+<motion.h2
               variants={headingChildVariants}
               className="text-4xl md:text-5xl lg:text-[3.25rem] text-primary leading-[1.1]"
-              style={{ fontFamily: "Syne, sans-serif", fontWeight: 700 }}
             >
-              Choose Your{" "}
-              <span className="italic font-normal text-cream">Crack</span>
+              Let’s Visualise Your Visit to{" "}
+              <span className="italic font-normal text-cream">TCK</span>
             </motion.h2>
-            <motion.p variants={headingChildVariants} className="mt-6 text-primary/80 text-[15px] leading-[1.9] max-w-xl mx-auto">
-              A neighbourhood morning, told in six panels. Pick a thread,
-              follow the choices, and find your way around The Kernel.
-            </motion.p>
           </motion.div>
 
           {/* Story card wrapper */}
@@ -179,7 +165,7 @@ export default function About() {
                 >
                   <span
                     className="text-[10px] tracking-[0.3em] uppercase text-primary/50"
-                    style={{ fontFamily: "Syne, sans-serif" }}
+                    style={{ fontFamily: "Whyte, sans-serif" }}
                   >
                     Journey
                   </span>
@@ -188,7 +174,7 @@ export default function About() {
                     <span key={i} className="flex items-center gap-1.5">
                       <span
                         className="text-[11px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-semibold tracking-[0.05em]"
-                        style={{ fontFamily: "Syne, sans-serif" }}
+                        style={{ fontFamily: "Whyte, sans-serif" }}
                       >
                         {id}
                       </span>
@@ -209,7 +195,7 @@ export default function About() {
                 <div className="flex items-center gap-3">
                   <span
                     className="text-[10px] tracking-[0.3em] uppercase text-cream/40"
-                    style={{ fontFamily: "Syne, sans-serif" }}
+                    style={{ fontFamily: "Whyte, sans-serif" }}
                   >
                     Panel
                   </span>
@@ -221,7 +207,7 @@ export default function About() {
                       exit={{ opacity: 0, scale: 0.85 }}
                       transition={{ duration: 0.2, ease: EASE_OUT }}
                       className="text-xs px-3 py-1 rounded-full bg-white/10 text-cream font-semibold tracking-[0.15em]"
-                      style={{ fontFamily: "Syne, sans-serif" }}
+                      style={{ fontFamily: "Whyte, sans-serif" }}
                     >
                       {currentId}
                     </motion.span>
@@ -249,7 +235,7 @@ export default function About() {
                   <button
                     onClick={restart}
                     className="text-[11px] tracking-[0.2em] uppercase text-cream/40 hover:text-cream/80 transition-colors cursor-pointer"
-                    style={{ fontFamily: "Syne, sans-serif" }}
+                    style={{ fontFamily: "Whyte, sans-serif" }}
                   >
                     Restart
                   </button>
@@ -263,7 +249,7 @@ export default function About() {
                 <span
                   className="absolute right-5 top-1/2 -translate-y-1/2 text-[6.5rem] leading-none font-bold pointer-events-none select-none"
                   style={{
-                    fontFamily: "Syne, sans-serif",
+                    fontFamily: "Whyte, sans-serif",
                     color: "rgba(255,255,255,0.04)",
                   }}
                   aria-hidden
@@ -304,13 +290,13 @@ export default function About() {
                             <span className="flex items-center gap-3">
                               <span
                                 className="w-5 h-5 flex items-center justify-center rounded-full border border-white/15 text-[10px] text-cream/40 group-hover:border-warm/40 group-hover:text-warm/70 transition-colors shrink-0"
-                                style={{ fontFamily: "Syne, sans-serif" }}
+                                style={{ fontFamily: "Whyte, sans-serif" }}
                               >
                                 {idx + 1}
                               </span>
                               <span
                                 className="text-cream/75 text-[14px] group-hover:text-cream transition-colors"
-                                style={{ fontFamily: "Syne, sans-serif" }}
+                                style={{ fontFamily: "Whyte, sans-serif" }}
                               >
                                 {choice.text}
                               </span>
@@ -318,7 +304,7 @@ export default function About() {
                             <span className="flex items-center gap-2 text-cream/25 group-hover:text-warm/60 transition-colors shrink-0 ml-4">
                               <span
                                 className="text-[11px] tracking-[0.1em]"
-                                style={{ fontFamily: "Syne, sans-serif" }}
+                                style={{ fontFamily: "Whyte, sans-serif" }}
                               >
                                 {choice.goto}
                               </span>
@@ -341,7 +327,7 @@ export default function About() {
                           <div className="flex-1 h-px bg-white/15" />
                           <span
                             className="text-[11px] tracking-[0.4em] uppercase text-cream/40"
-                            style={{ fontFamily: "Syne, sans-serif" }}
+                            style={{ fontFamily: "Whyte, sans-serif" }}
                           >
                             The End
                           </span>
@@ -351,13 +337,13 @@ export default function About() {
                           <button
                             onClick={restart}
                             className="px-5 py-2.5 rounded-xl bg-warm text-primary text-[13px] font-semibold tracking-[0.08em] hover:bg-warm/90 transition-colors cursor-pointer"
-                            style={{ fontFamily: "Syne, sans-serif" }}
+                            style={{ fontFamily: "Whyte, sans-serif" }}
                           >
                             Play Again
                           </button>
                           <span
                             className="text-cream/40 text-[13px]"
-                            style={{ fontFamily: "Syne, sans-serif" }}
+                            style={{ fontFamily: "Whyte, sans-serif" }}
                           >
                             You discovered {visitedCount} of {TOTAL}.
                           </span>

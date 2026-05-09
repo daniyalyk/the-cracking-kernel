@@ -62,7 +62,6 @@ export default function CoffeeShowcase() {
           <motion.h2
             variants={{ hidden: { y: 40, opacity: 0 }, visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease: EASE_OUT } } }}
             className="text-4xl md:text-5xl lg:text-[3.5rem] text-primary leading-[1.1]"
-            style={{ fontFamily: "Syne, sans-serif", fontWeight: 700 }}
           >
             Good Food,<br />
             <span className="text-warm">Made Simply</span>
@@ -116,10 +115,10 @@ export default function CoffeeShowcase() {
               onMouseLeave={() => setActiveIndex(null)}
             >
               <div className="py-8 md:py-10 flex flex-col md:flex-row md:items-center gap-4 md:gap-8 transition-all duration-500 group-hover:pl-4">
-                <span className="text-warm/40 text-sm tabular-nums shrink-0 w-8" style={{ fontFamily: "Syne, sans-serif" }}>
+                <span className="text-warm/40 text-sm tabular-nums shrink-0 w-8" style={{ fontFamily: "Whyte, sans-serif" }}>
                   0{i + 1}
                 </span>
-                <h3 className="text-2xl md:text-3xl lg:text-4xl text-primary transition-colors duration-300 group-hover:text-warm flex-1" style={{ fontFamily: "Syne, sans-serif", fontWeight: 600 }}>
+                <h3 className="text-2xl md:text-3xl lg:text-4xl text-primary transition-colors duration-300 group-hover:text-warm flex-1">
                   {item.name}
                 </h3>
                 <span className="text-xs tracking-[0.2em] uppercase text-text-light md:opacity-0 md:translate-x-4 md:group-hover:opacity-100 md:group-hover:translate-x-0 transition-all duration-500 shrink-0">

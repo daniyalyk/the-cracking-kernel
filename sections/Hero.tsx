@@ -78,7 +78,7 @@ export default function Hero() {
                   className={`block leading-[0.92] ${
                     i === 2 ? "text-warm italic font-light" : "text-white font-extrabold"
                   }`}
-                  style={{ fontFamily: "Syne, sans-serif", fontSize: "clamp(3.2rem, 7.5vw, 6.5rem)" }}
+                  style={{ fontSize: "clamp(3.2rem, 7.5vw, 6.5rem)" }}
                   initial={{ y: 90, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ duration: 1.0, delay: 0.8 + i * 0.1, ease: EASE_OUT }}
@@ -91,15 +91,32 @@ export default function Hero() {
 
           {/* Tagline */}
           <motion.p
-            className="text-white/50 text-[13.5px] leading-[1.85] max-w-[320px] mb-10 md:mb-12"
+            className="text-white/50 text-[13.5px] leading-[1.85] max-w-[320px] mb-6"
             initial={{ y: 24, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 1.2, ease: EASE_OUT }}
           >
-            Where every morning cracks open a little differently.
-            <br />
-            Coffee, deli food &amp; good people — served fresh.
+            Your Friendly Neighbourhood Café & Deli
           </motion.p>
+
+          {/* Our Story label + paragraph */}
+          <motion.div
+            className="mb-10 md:mb-12"
+            initial={{ y: 24, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.8, delay: 1.28, ease: EASE_OUT }}
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-px bg-white/30" />
+              <span className="text-[11px] tracking-[0.3em] uppercase text-white/40" style={{ fontFamily: "Whyte, sans-serif" }}>
+                Our Story
+              </span>
+              <div className="w-10 h-px bg-white/30" />
+            </div>
+            <p className="text-white/40 text-[13px] leading-[1.9] max-w-[340px]">
+              Our <span className="text-warm/80">journey</span> began with a simple <span className="text-warm/80">dream</span> — to create a <span className="text-warm/80">space</span> where <span className="text-warm/80">warmth</span>, <span className="text-warm/80">community</span>, and exceptional <span className="text-warm/80">flavours</span> intertwine. This is more than just a business — it&apos;s a <span className="text-warm/80">labor of love</span>, a testament to the <span className="text-warm/80">power of family</span>, and a <span className="text-warm/80">beacon of warmth</span> for all who enter.
+            </p>
+          </motion.div>
 
           {/* CTAs */}
           <motion.div
@@ -111,16 +128,16 @@ export default function Hero() {
             <button
               onClick={() => document.getElementById("menu")?.scrollIntoView({ behavior: "smooth" })}
               className="px-7 py-3.5 bg-warm text-primary text-[11px] tracking-[0.22em] uppercase font-bold hover:bg-warm-light transition-colors duration-300 cursor-pointer"
-              style={{ fontFamily: "Syne, sans-serif" }}
+              style={{ fontFamily: "Whyte, sans-serif" }}
             >
               View Menu
             </button>
             <button
-              onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })}
+              onClick={() => document.getElementById("visit")?.scrollIntoView({ behavior: "smooth" })}
               className="flex items-center gap-2.5 text-white/55 text-[11px] tracking-[0.22em] uppercase hover:text-white transition-colors duration-300 cursor-pointer"
-              style={{ fontFamily: "Syne, sans-serif" }}
+              style={{ fontFamily: "Whyte, sans-serif" }}
             >
-              Our Story
+              Visit Us
               <svg width="16" height="10" viewBox="0 0 16 10" fill="none" className="text-warm">
                 <path d="M0 5h14M10 1l4 4-4 4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
@@ -139,7 +156,7 @@ export default function Hero() {
         <div className="w-px h-14 bg-gradient-to-b from-white/20 to-transparent" />
         <span
           className="text-white/20 text-[9px] tracking-[0.45em] uppercase"
-          style={{ fontFamily: "Syne, sans-serif", writingMode: "vertical-rl", transform: "rotate(180deg)" }}
+          style={{ fontFamily: "Whyte, sans-serif", writingMode: "vertical-rl", transform: "rotate(180deg)" }}
         >
           Est. 2024
         </span>
@@ -152,7 +169,7 @@ export default function Hero() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.7, delay: 1.6 }}
       >
-        <span className="text-white/30 text-[9px] tracking-[0.4em] uppercase" style={{ fontFamily: "Syne, sans-serif" }}>
+        <span className="text-white/30 text-[9px] tracking-[0.4em] uppercase" style={{ fontFamily: "Whyte, sans-serif" }}>
           Scroll
         </span>
         <div className="w-px h-10 bg-gradient-to-b from-white/30 to-transparent" />

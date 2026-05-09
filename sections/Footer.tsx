@@ -31,7 +31,7 @@ export default function Footer() {
 
           {/* Location */}
           <motion.div variants={colVariants}>
-            <h4 className="text-white/50 text-xs tracking-[0.2em] uppercase mb-4" style={{ fontFamily: "Syne, sans-serif" }}>Location</h4>
+            <h4 className="text-white/50 text-xs tracking-[0.2em] uppercase mb-4">Location</h4>
             <div className="space-y-1.5">
               <p className="text-white/30 text-sm">1st Floor, 254</p>
               <p className="text-white/30 text-sm">Sector G, Phase 5 D.H.A</p>
@@ -42,7 +42,7 @@ export default function Footer() {
 
           {/* Hours */}
           <motion.div variants={colVariants}>
-            <h4 className="text-white/50 text-xs tracking-[0.2em] uppercase mb-4" style={{ fontFamily: "Syne, sans-serif" }}>Hours</h4>
+            <h4 className="text-white/50 text-xs tracking-[0.2em] uppercase mb-4">Hours</h4>
             <div className="space-y-1.5">
               <p className="text-white/30 text-sm">Open Daily</p>
               <p className="text-white/30 text-sm">12:00 PM &ndash; 12:00 AM</p>
@@ -51,7 +51,7 @@ export default function Footer() {
 
           {/* Connect */}
           <motion.div variants={colVariants}>
-            <h4 className="text-white/50 text-xs tracking-[0.2em] uppercase mb-4" style={{ fontFamily: "Syne, sans-serif" }}>Connect</h4>
+            <h4 className="text-white/50 text-xs tracking-[0.2em] uppercase mb-4">Connect</h4>
             <div className="space-y-1.5">
               <a href="https://www.instagram.com/thecrackingkernel/" target="_blank" rel="noopener noreferrer" className="block text-white/30 text-sm hover:text-warm transition-colors duration-300">Instagram</a>
               <a href="https://www.foodpanda.pk/restaurant/zi7e/the-cracking-kernel-cafe-and-deli" target="_blank" rel="noopener noreferrer" className="block text-white/30 text-sm hover:text-warm transition-colors duration-300">Foodpanda</a>

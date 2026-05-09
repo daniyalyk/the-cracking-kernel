@@ -96,7 +96,7 @@ export default function Navbar() {
               key={link.label}
               onClick={() => scrollTo(link.target)}
               className="text-white/70 text-[13px] tracking-[0.15em] uppercase hover:text-white transition-colors duration-300 relative group cursor-pointer"
-              style={{ fontFamily: "Syne, sans-serif" }}
+              style={{ fontFamily: "Whyte, sans-serif" }}
             >
               {link.label}
               <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-warm group-hover:w-full transition-all duration-300" />
@@ -146,7 +146,7 @@ export default function Navbar() {
                 transition={{ duration: 0.6, delay: 0.15 + i * 0.08, ease: EASE_OUT }}
                 onClick={() => { setIsOpen(false); scrollTo(link.target); }}
                 className="text-white text-3xl font-light tracking-[0.15em] uppercase hover:text-warm transition-colors duration-300 cursor-pointer"
-                style={{ fontFamily: "Syne, sans-serif" }}
+                style={{ fontFamily: "Whyte, sans-serif" }}
               >
                 {link.label}
               </motion.button>

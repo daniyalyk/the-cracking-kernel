@@ -39,7 +39,7 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
         />
         {/* Price badge */}
         <div className="absolute top-3 right-3 bg-primary/85 backdrop-blur-sm text-white text-xs px-3 py-1.5 rounded-full"
-          style={{ fontFamily: "Syne, sans-serif", fontWeight: 600 }}
+          style={{ fontFamily: "Whyte, sans-serif", fontWeight: 600 }}
         >
           Rs. {item.price.toLocaleString()}
         </div>
@@ -49,7 +49,6 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
       <div className="p-4 md:p-5">
         <h4
           className="text-[15px] md:text-base text-primary leading-snug mb-1.5 transition-colors duration-300 group-hover:text-warm"
-          style={{ fontFamily: "Syne, sans-serif", fontWeight: 500 }}
         >
           {item.name}
         </h4>
@@ -63,7 +62,7 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
           className="w-full py-2.5 bg-primary text-white text-xs tracking-[0.08em] uppercase rounded-lg
                      transition-all duration-300 hover:bg-warm hover:text-primary
                      opacity-100 md:opacity-0 md:group-hover:opacity-100 md:translate-y-1 md:group-hover:translate-y-0"
-          style={{ fontFamily: "Syne, sans-serif", fontWeight: 500 }}
+          style={{ fontFamily: "Whyte, sans-serif", fontWeight: 500 }}
         >
           + Add to Cart
         </button>
