@@ -109,7 +109,7 @@ export default function Menu() {
       </div>
 
       {/* Content */}
-      <div className="px-6 md:px-12 lg:px-24 bg-cover bg-center bg-no-repeat py-28 md:py-44 " style={{ backgroundImage: "url('/assets/images/app-bg.png')" }}>
+      <div className="px-6 md:px-12 lg:px-24 bg-cover bg-center bg-no-repeat py-28 md:py-44 " style={{ backgroundImage: "url('/assets/images/menu-bg.png')", backgroundSize: "contain", backgroundPosition: "center", backgroundRepeat: "repeat" }}>
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
 
@@ -138,7 +138,7 @@ export default function Menu() {
                       />
                       </a>
                     <div className="absolute bottom-0 left-0 right-0 p-6 bg-linear-to-t from-primary/80 to-transparent">
-                      <span className="text-white text-2xl md:text-3xl" style={{ fontFamily: "Royale, serif" }}>
+                      <span className="text-white text-2xl md:text-3xl uppercase" style={{ fontFamily: "Royale, serif" }}>
                         {menuCategories[activeTab].category}
                       </span>
                     </div>
