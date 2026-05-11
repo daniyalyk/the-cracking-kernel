@@ -9,21 +9,21 @@ const testimonials = [
   {
     quote: "I had an outstanding experience from start to finish. The ambiance was warm and welcoming, the staff were incredibly polite, and the service was quick. Every dish was fresh, flavourful, and perfectly prepared — you can really tell they use high-quality ingredients. What impressed me the most was the attention to detail and the cleanliness of the place. It truly made the whole dining experience comfortable and enjoyable. Highly recommended for anyone looking for great food, great service, and great vibes. Definitely coming back! 🍽✨",
     name: "Mr. A.A.K",
-    role: "Dine-in Customer",
+    role: "Google Review",
     rotate: "-2deg",
     color: "#FFF9C4",
   },
   {
     quote: "It was my first visit and literally fell in love with the place. Their schnitzel sandwich is my new favourite and I just can't get enough of it. If you are in the area and looking for a great spot to grab a bite or do some freelance + lunch cracking kernel should be on your list. Will definitely visit again and I hope they maintain the quality and taste",
     name: "Mr. S.R",
-    role: "Dine-in Customer",
+    role: "Google Review",
     rotate: "1.5deg",
     color: "#C8E6C9",
   },
   {
     quote: "I had a wonderful experience at this restaurant! The food was absolutely delicious, and I was pleasantly surprised to see the Owner (Mr.Ali) on-site, assisting customers with their menu selections. He was incredibly professional and added a personal touch to our visit. The ambiance was warm and inviting, making it a truly friendly atmosphere. Highly recommend!",
     name: "Mr. T.E",
-    role: "Dine-in Customer",
+    role: "Google Review",
     rotate: "-1deg",
     color: "#FFDDD2",
   },
@@ -92,16 +92,14 @@ export default function Testimonials() {
               <div className="w-8 h-px mb-4" style={{ background: "rgba(26,49,45,0.25)" }} />
 
               {/* Author */}
-              <div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
                 <span
-                  className="block text-sm font-bold"
-                  style={{ color: "#1A312D", fontFamily: "Whyte, sans-serif" }}
+                  style={{ color: "#1A312D", fontFamily: "Whyte, sans-serif", fontWeight: 700, fontSize: "14px", lineHeight: 1.4, display: "block" }}
                 >
                   {testimonial.name}
                 </span>
                 <span
-                  className="text-xs opacity-50"
-                  style={{ color: "#1A312D", fontFamily: "Whyte, sans-serif" }}
+                  style={{ color: "#1A312D", fontFamily: "Whyte, sans-serif", fontSize: "12px", lineHeight: 1.4, opacity: 0.5, display: "block" }}
                 >
                   {testimonial.role}
                 </span>

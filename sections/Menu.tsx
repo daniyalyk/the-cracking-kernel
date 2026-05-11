@@ -80,7 +80,7 @@ export default function Menu() {
       <SectionLabel light text="" className="justify-center mb-8" />
 
       {/* Sticky tabs */}
-      <div className="sticky top-[72px] md:top-[80px] z-40 bg-primary border-b border-white/10 py-5">
+      <div className="md:sticky md:top-[80px] z-40 bg-primary border-b border-white/10 py-5">
         <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
           <motion.div
             className="grid grid-cols-2 md:flex md:flex-wrap md:justify-center gap-3 md:gap-6 max-w-[300px] mx-auto md:max-w-none"

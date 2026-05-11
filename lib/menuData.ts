@@ -222,7 +222,7 @@ export const menuCategories: MenuCategory[] = [
   {
     category: "Desserts",
     slug: "desserts",
-    heroImage: "/assets/pictures/menu/Bar1.webp",
+    heroImage: "/assets/pictures/menu/Desserts.webp",
     items: [
       {
         id: generateId("desserts", "Apple Crumble"),
@@ -293,7 +293,7 @@ export const menuCategories: MenuCategory[] = [
   {
     category: "Bar",
     slug: "bar",
-    heroImage: "/assets/pictures/menu/Bar2.webp",
+    heroImage: "/assets/pictures/menu/Bar.webp",
     items: [
       {
         id: generateId("bar", "Cookie Butter Latte"),
