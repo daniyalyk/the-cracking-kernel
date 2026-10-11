@@ -1,5 +1,3 @@
-"use client";
-
 import Navbar from "@/components/Navbar";
 import Hero from "@/sections/Hero";
 import About from "@/sections/About";
@@ -9,7 +7,13 @@ import Gallery from "@/sections/Gallery";
 import Testimonials from "@/sections/Testimonials";
 import Reservation from "@/sections/Reservation";
 import Footer from "@/sections/Footer";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "https://www.thecrackingkernel.com/",
+  },
+};
 // Disable browser scroll restoration so the browser doesn't re-scroll
 // to a previous position after hydration.
 if (typeof window !== "undefined") {
