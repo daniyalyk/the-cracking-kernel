@@ -6,6 +6,7 @@ import SectionLabel from "@/components/SectionLabel";
 import AnimatedHeading from "@/components/AnimatedHeading";
 import { menuCategories } from "@/lib/menuData";
 import { EASE_OUT } from "@/animations";
+import Image from "next/image";
 
 const galleryByCategory = menuCategories.map((cat) => ({
   category: cat.category,
@@ -140,12 +141,15 @@ export default function Gallery() {
                   style={{ pointerEvents: dragged ? "none" : "auto" }}
                 >
                   <div className={`relative ${aspectClass} overflow-hidden`}>
-                    <img
+                    <Image
                       src={image.src}
                       alt={image.alt}
+                      width={900}
+                      height={1200}
                       loading="lazy"
                       draggable={false}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      sizes={isFeatured ? "(max-width: 768px) 70vw, (max-width: 1280px) 35vw, 26vw" : "(max-width: 768px) 60vw, (max-width: 1280px) 30vw, 20vw"}
+                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                       style={{ transform: "scale(1.02)" }}
                     />
                     <div className="absolute inset-0 bg-primary/20 group-hover:bg-primary/0 transition-colors duration-500" />

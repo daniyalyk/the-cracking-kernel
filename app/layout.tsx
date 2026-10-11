@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
 import ToasterProvider from "@/components/ToasterProvider";
+import localFont from "next/font/local"
 
 // ============================================
 // WEBSITE CONFIGURATION
@@ -154,9 +155,57 @@ const restaurantSchema = {
 };
 
 // ============================================
-// ROOT LAYOUT
+// Fonts
 // ============================================
 
+const royale = localFont({
+  src: "../public/assets/fonts/Royale/Royale-Bold.woff2",
+
+  variable: "--font-royale",
+
+  weight: "700",
+
+  style: "normal",
+
+  display: "swap",
+
+  preload: true,
+
+  fallback: ["Georgia", "serif"],
+});
+
+const whyte = localFont({
+  src: [
+    {
+      path: "../public/assets/fonts/Whyte/Whyte-Light.woff2",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "../public/assets/fonts/Whyte/Whyte-Book.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public/assets/fonts/Whyte/Whyte-Bold.woff2",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+
+  variable: "--font-whyte",
+
+  display: "swap",
+
+  preload: true,
+
+  fallback: ["Arial", "sans-serif"],
+});
+
+// ============================================
+// ROOT LAYOUT
+// ============================================
+ 
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -165,7 +214,7 @@ export default function RootLayout({
   const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
   return (
-    <html lang="en">
+    <html lang="en" className={`${royale.variable} ${whyte.variable}`}>
       <head>
         {/* Restaurant Structured Data */}
         <script

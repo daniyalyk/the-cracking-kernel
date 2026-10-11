@@ -1,37 +1,5 @@
 @import "tailwindcss";
 
-@font-face {
-  font-family: "Royale";
-  src: url("/assets/fonts/Royale/ROYALE Bold.otf") format("opentype");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Whyte";
-  src: url("/assets/fonts/Whyte/Whyte-Light.ttf") format("truetype");
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Whyte";
-  src: url("/assets/fonts/Whyte/Whyte-Book.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Whyte";
-  src: url("/assets/fonts/Whyte/Whyte-Bold.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
 :root {
   --primary: #1A312D;
   --primary-light: #24433D;
@@ -70,8 +38,8 @@
   --color-text-light: var(--text-light);
   --color-text-on-dark: var(--text-on-dark);
   --color-border-light: var(--border-light);
-  --font-heading: "Royale", serif;
-  --font-body: "Whyte", sans-serif;
+  --font-heading: var(--font-royale), Georgia, serif;
+  --font-body: var(--font-whyte), Arial, sans-serif;
 }
 
 /* Smooth scrolling */

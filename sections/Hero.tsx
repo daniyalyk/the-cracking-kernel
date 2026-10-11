@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { EASE_OUT } from "@/animations";
+import Image from "next/image";
 
 export default function Hero() {
   // Dispatch heroVideoReady so Navbar slides in once the main elements are visible
@@ -20,24 +21,31 @@ export default function Hero() {
     >
       {/* ── Background illustration ── */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <motion.img
-          src="/assets/images/hero-illustration.png"
-          alt=""
-          aria-hidden
-          className="h-[105%] w-auto max-w-none select-none pointer-events-none"
-          style={{
-            filter:
-              "drop-shadow(0 32px 80px rgba(200,169,126,0.18)) drop-shadow(0 8px 24px rgba(0,0,0,0.55))",
-          }}
-          draggable={false}
+        <motion.div
+          className="relative h-full w-full"
           initial={{ scale: 1.04, opacity: 0 }}
           animate={{ scale: 1, opacity: 1, y: [0, -14, 0] }}
           transition={{
-            scale:   { duration: 1.8, delay: 0.2, ease: EASE_OUT },
+            scale: { duration: 1.8, delay: 0.2, ease: EASE_OUT },
             opacity: { duration: 1.8, delay: 0.2, ease: EASE_OUT },
-            y:       { duration: 4.2, delay: 2.5, ease: "easeInOut", repeat: Infinity, repeatType: "loop" },
+            y: { duration: 4.2, delay: 2.5, ease: "easeInOut", repeat: Infinity, repeatType: "loop" },
           }}
-        />
+        >
+          <Image
+            src="/assets/images/hero-illustration.png"
+            alt=""
+            aria-hidden
+            fill
+            priority
+            sizes="100vw"
+            className="pointer-events-none select-none object-contain"
+            style={{
+              filter:
+                "drop-shadow(0 32px 80px rgba(200,169,126,0.18)) drop-shadow(0 8px 24px rgba(0,0,0,0.55))",
+              objectPosition: "center",
+            }}
+          />
+        </motion.div>
       </div>
 
       {/* Left-to-right readability gradient */}
