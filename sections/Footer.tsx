@@ -77,7 +77,7 @@ export default function Footer() {
           whileInView="visible"
           viewport={VIEWPORT}
         >
-          <p className="text-white/20 text-xs tracking-wider">&copy; The Cracking Kernel is a brand owned and operated by Capstone Solutions (Pvt.) Ltd.</p>
+          <p className="text-white/20 text-xs tracking-wider text-center">&copy; The Cracking Kernel is a brand owned and operated by Capstone Solutions (Pvt.) Ltd.</p>
           <p className="text-white/20 text-xs tracking-wider">Cafe & Deli &mdash; DHA Phase 5, Lahore</p>
         </motion.div>
 
