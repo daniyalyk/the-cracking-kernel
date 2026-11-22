@@ -25,7 +25,7 @@ export default function Footer() {
           <motion.div variants={colVariants} className="md:col-span-1">
             <img src="/assets/images/logo-white.webp" alt="The Cracking Kernel" className="h-14 w-auto mb-4 opacity-70" />
             <p className="text-white/30 text-sm leading-relaxed">
-              Simply good food,<br />good people & good vibes.
+              Your Friendly Neighbourhood<br />Café & Deli.
             </p>
           </motion.div>
 
@@ -77,7 +77,7 @@ export default function Footer() {
           whileInView="visible"
           viewport={VIEWPORT}
         >
-          <p className="text-white/20 text-xs tracking-wider">&copy; 2026 The Cracking Kernel. All rights reserved.</p>
+          <p className="text-white/20 text-xs tracking-wider">&copy; The Cracking Kernel is a brand owned and operated by Capstone Solutions (Pvt.) Ltd.</p>
           <p className="text-white/20 text-xs tracking-wider">Cafe & Deli &mdash; DHA Phase 5, Lahore</p>
         </motion.div>
 
