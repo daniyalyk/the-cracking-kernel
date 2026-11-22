@@ -84,6 +84,11 @@ export const metadata: Metadata = {
 
   // Other Metadata
   category: "food and drink",
+
+  // Meta / Facebook Domain Verification
+  other: {
+    "facebook-domain-verification": "z9kk1c7hasv4utctfhjz4bjk4gkkv2",
+  },
 };
 
 // ============================================
